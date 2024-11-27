@@ -1,29 +1,27 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import BrowseBooks from "./pages/BrowseBooks";
-import AddBook from "./pages/AddBook";
-import BookDetails from "./pages/BookDetailsPage";
-import NotFoundPage from "./pages/NotFound";
-import BooksByCategory from "./pages/BooksByCategory";
-import Navbar from "./components/Navbar";
-import NewlyAddedBooks from "./pages/NewlyAddedBooks";
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import NotFound from './components/NotFound';
+import ShimmerLoader from './components/ShimmerCard';
+import Checkout from './components/Checkout';
 
-function App() {
-  return (
-    <Router>
-        <Navbar/>
+const ProductList = lazy(() => import('./components/ProductList'));
+const ProductDetail = lazy(() => import('./components/ProductDetail'));
+const Cart = lazy(() => import('./components/Cart'));
+
+const App = () => (
+  <Router >
+    <Header />
+    <Suspense fallback={<ShimmerLoader/>}>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/books" element={<BrowseBooks />} />
-        <Route path="/books/:category" element={<BrowseBooks />} />
-        <Route path="/add-book" element={<AddBook />} />
-        <Route path="/book/works/:id" element={<BookDetails />} />
-        <Route path="/categories" element={<BooksByCategory />} />
-        <Route path="/newly-added-books" element={<NewlyAddedBooks />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/" element={<ProductList />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-    </Router>
-  );
-}
+    </Suspense>
+  </Router>
+);
 
-export default App;
+export default App; // <--- Default export
